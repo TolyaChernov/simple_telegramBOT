@@ -4,6 +4,7 @@ import requests  # # pip install requests
 import telebot
 from bs4 import BeautifulSoup as BS  # # pip install beautifulsoup4
 from telebot import types
+
 from telegram_key import key
 from utils import f_meth, f_pos
 
@@ -11,6 +12,7 @@ bot = telebot.TeleBot(key)
 
 
 def anekdot():
+    """ Вывод текста из html страницы """
     url = "https://www.anekdot.ru/last/anekdot/"
     r = requests.get(url)
     html = BS(r.content, "html.parser")
@@ -24,6 +26,13 @@ def anekdot():
 
 
 def pos(name: str):
+    """
+    Вывод информации из БД
+
+    Args:
+        name (str):
+
+    """
     result = f_pos(name)
     try:
         return result
@@ -32,6 +41,13 @@ def pos(name: str):
 
 
 def meth(name: str):
+    """
+    Вывод информации из БД
+
+    Args:
+        name (str):
+
+    """
     result = f_meth(name)
     try:
         return result
@@ -40,7 +56,15 @@ def meth(name: str):
 
 
 @bot.message_handler(commands=["start"])
-def start(message):
+def start(message: str):
+    """
+    Запуск телеграмм бота
+
+    Args:
+        message (str):
+
+    """
+    print(message, type(message))
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
     btn1 = types.KeyboardButton("Положение при сварке")
     btn2 = types.KeyboardButton("Способы сварки")
@@ -55,7 +79,14 @@ def start(message):
 
 
 @bot.message_handler(content_types=["text"])
-def mess(message):
+def mess(message: str):
+    """
+    Ответ на запросы из тгбота
+
+    Args:
+        message (str):
+
+    """
     get_message_bot = message.text.strip().lower()
 
     lst_meth = ["mma", "tig", "mig/mag"]
@@ -76,7 +107,11 @@ def mess(message):
             parse_mode="html",
             reply_markup=markup,
         )
-        print(message.from_user.first_name, message.from_user.last_name, '- раздел анекдоты')
+        print(
+            message.from_user.first_name,
+            message.from_user.last_name,
+            "- раздел анекдоты",
+        )
 
     elif get_message_bot == "способы сварки":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
@@ -92,7 +127,11 @@ def mess(message):
             parse_mode="html",
             reply_markup=markup,
         )
-        print(message.from_user.first_name, message.from_user.last_name, '- раздел способы сварки')
+        print(
+            message.from_user.first_name,
+            message.from_user.last_name,
+            "- раздел способы сварки",
+        )
 
     elif get_message_bot in lst_meth:
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
@@ -112,7 +151,11 @@ def mess(message):
             parse_mode="html",
             reply_markup=markup,
         )
-        print(message.from_user.first_name, message.from_user.last_name, '- раздел способы сварки')
+        print(
+            message.from_user.first_name,
+            message.from_user.last_name,
+            "- раздел способы сварки",
+        )
 
     elif get_message_bot == "положение при сварке":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=4)
@@ -132,7 +175,11 @@ def mess(message):
             parse_mode="html",
             reply_markup=markup,
         )
-        print(message.from_user.first_name, message.from_user.last_name, '- раздел положение при сварке')
+        print(
+            message.from_user.first_name,
+            message.from_user.last_name,
+            "- раздел положение при сварке",
+        )
 
     elif get_message_bot in lst_pos:
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=4)
@@ -156,7 +203,11 @@ def mess(message):
             parse_mode="html",
             reply_markup=markup,
         )
-        print(message.from_user.first_name, message.from_user.last_name, '- раздел положение при сварке')
+        print(
+            message.from_user.first_name,
+            message.from_user.last_name,
+            "- раздел положение при сварке",
+        )
 
     elif get_message_bot == "старт":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
@@ -168,7 +219,10 @@ def mess(message):
         bot.send_message(
             message.chat.id, send_mess, parse_mode="html", reply_markup=markup
         )
-        print(message.from_user.first_name, message.from_user.last_name, '- старт')
+        print(
+            message.from_user.first_name,
+            message.from_user.last_name,
+            "- старт")
 
     elif get_message_bot == "назад":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
@@ -180,7 +234,10 @@ def mess(message):
         bot.send_message(
             message.chat.id, send_mess, parse_mode="html", reply_markup=markup
         )
-        print(message.from_user.first_name, message.from_user.last_name, '- назад')
+        print(
+            message.from_user.first_name,
+            message.from_user.last_name,
+            "- назад")
 
     else:
         bot.send_message(message.chat.id, "Извините. ", parse_mode="html")
@@ -193,7 +250,10 @@ def mess(message):
         bot.send_message(
             message.chat.id, final_message, parse_mode="html", reply_markup=markup
         )
-        print(message.from_user.first_name, message.from_user.last_name, '- ошибка')
+        print(
+            message.from_user.first_name,
+            message.from_user.last_name,
+            "- ошибка")
 
 
 bot.polling(none_stop=True)
