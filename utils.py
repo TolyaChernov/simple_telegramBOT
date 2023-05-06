@@ -23,11 +23,25 @@ class Weld_Meth(Model):
 
 # Функция вывода
 def f_pos(word1: str):
+    """
+    Выборка информации из БД
+
+    Args:
+        word1 (str):
+
+    """
     i = Weld_Pos.get(Weld_Pos.pos_short == word1)
     return str(i.pos_long)
 
 
 def f_meth(word1: str):
+    """
+    Выборка информации из БД
+
+    Args:
+        word1 (str):
+
+    """
     i = Weld_Meth.get(Weld_Meth.meth_short == word1)
     return str(i.meth_long)
 
